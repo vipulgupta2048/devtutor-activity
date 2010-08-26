@@ -1,0 +1,15 @@
+COPYING
+bin/activityname.sh
+AbiWordActivity.py
+keybindings.xml
+toolbar.py
+widgets.py
+activity.py
+helloworld.py
+modules.py
+subactivity1.py
+setup.py
+port/chooser.py
+port/__init__.py
+activity/activity-helloworld.svg
+activity/activity.info

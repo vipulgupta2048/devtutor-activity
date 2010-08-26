@@ -1,0 +1,7 @@
+[Activity]
+name = DevTutor
+activity_version = 1
+bundle_id = org.sugarlabs.DevTutor
+exec = activityname.sh
+icon = activity-helloworld
+license = GPLv2+
