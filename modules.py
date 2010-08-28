@@ -114,36 +114,37 @@ class ShowModules(gobject.GObject):
         button1.show()
         button1.get_child().modify_font(pango.FontDescription("Sans 18"))
 
+        self.line2 = gtk.HBox()
         button2 = gtk.Button("Bundlebuilder")
-        self.line1.add(button2)
+        self.line2.add(button2)
         #button2.connect('clicked', self.bundlebuilder, None)
         button2.show()
         button2.get_child().modify_font(pango.FontDescription("Sans 18"))
 
-        self.line2 = gtk.HBox()
-        
+        self.line3 = gtk.HBox()        
         button3 = gtk.Button("Factory")
-        self.line2.add(button3)
+        self.line3.add(button3)
         #button3.connect('clicked', self.factory, None)
         button3.show()
         button3.get_child().modify_font(pango.FontDescription("Sans 18"))
 
+        self.line4 = gtk.HBox()
         button4 = gtk.Button("Handles")
-        self.line2.add(button4)
+        self.line4.add(button4)
         #button4.connect('clicked', self.handles, None)
         button4.show()
         button4.get_child().modify_font(pango.FontDescription("Sans 18"))
 
-        self.line3 = gtk.HBox()
-        
+        self.line5 = gtk.HBox()        
         button5 = gtk.Button("NamingAlert")
-        self.line3.add(button5)
+        self.line5.add(button5)
         #button5.connect('clicked', self.namingalert, None)
         button5.show()
         button5.get_child().modify_font(pango.FontDescription("Sans 18"))
 
+        self.line6 = gtk.HBox()
         button6 = gtk.Button("Widgets")
-        self.line3.add(button6)
+        self.line6.add(button6)
         button6.connect('clicked', self.widgets, None)
         button6.show()
         button6.get_child().modify_font(pango.FontDescription("Sans 18"))
@@ -151,10 +152,17 @@ class ShowModules(gobject.GObject):
         self.main_container.add(self.line1) 
         self.main_container.add(self.line2)
         self.main_container.add(self.line3)
+        self.main_container.add(self.line4) 
+        self.main_container.add(self.line5)
+        self.main_container.add(self.line6)
+
         self.line1.show() 
         self.line2.show() 
         self.line3.show() 
-        
+        self.line4.show() 
+        self.line5.show() 
+        self.line6.show() 
+          
         self.set_canvas(self.main_container)
         self.main_container.show()    
     
