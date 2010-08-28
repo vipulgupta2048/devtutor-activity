@@ -160,6 +160,7 @@ class DevTutorActivity(activity.Activity):
     def show_labels_hello(self, sender, data=None):         
         self.main_container = gtk.VBox()
         
+        self.add_padding()
         self.line1 = gtk.HBox()
         
         self.label1 = gtk.Label(_("Hello World activity step 1 - call activity.__init__"))
@@ -178,6 +179,7 @@ class DevTutorActivity(activity.Activity):
         self.main_container.add(self.line1)
         self.line1.show()
 
+        self.add_padding()
         self.line2 = gtk.HBox()
         
         self.label2 = gtk.Label(_("Hello Word activity step 2 - add toolbox"))
@@ -196,7 +198,7 @@ class DevTutorActivity(activity.Activity):
         self.main_container.add(self.line2)
         self.line2.show()
 
-                        
+        self.add_padding()                        
         self.line3 = gtk.HBox()
         
         self.label3 = gtk.Label(_("Hello World activity step 3 - add hello world label"))
@@ -215,7 +217,7 @@ class DevTutorActivity(activity.Activity):
         self.main_container.add(self.line3) 
         self.line3.show()
 
-
+        self.add_padding()
         self.line4 = gtk.HBox()
         
         self.label4 = gtk.Label(_("Hello World activity step 4 - add rotate button"))
@@ -234,13 +236,14 @@ class DevTutorActivity(activity.Activity):
         self.main_container.add(self.line4) 
         self.line4.show()
 
+        self.add_padding()
         self.set_canvas(self.main_container)
         self.main_container.show()         
          
 
     def show_labels_write(self, sender, data=None):         
         self.main_container = gtk.VBox()
-        
+        self.add_padding()        
         self.line1 = gtk.HBox()
         
         self.label1 = gtk.Label(_("Write activity step 1 "))
@@ -258,7 +261,7 @@ class DevTutorActivity(activity.Activity):
         
         self.main_container.add(self.line1)
         self.line1.show()
-
+        self.add_padding()
         self.line2 = gtk.HBox()
         
         self.label2 = gtk.Label(_("Write activity step 2"))
@@ -278,7 +281,7 @@ class DevTutorActivity(activity.Activity):
         self.line2.show()
 
         self.set_canvas(self.main_container)
-                
+        self.add_padding()
         self.line3 = gtk.HBox()
         
         self.label3 = gtk.Label(_("Write activity step 3"))
@@ -296,7 +299,7 @@ class DevTutorActivity(activity.Activity):
         
         self.main_container.add(self.line3) 
         self.line3.show()
-
+        self.add_padding()
         self.set_canvas(self.main_container)
         self.main_container.show()
          
