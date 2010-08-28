@@ -31,30 +31,16 @@ from sugar.activity.widgets import *
 
 class ShowModules(gobject.GObject):
 
-    __gsignals__ = {
-        'back': (gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE,
-                        ())
-    }
 
     def __init__(self, canvas):
         gobject.GObject.__init__(self)
         self.set_canvas = canvas    
          
-    def signal_handler(self, sender, data=None):
-        self.emit('back')
 
     def show_modules(self):
         
         self.main_container = gtk.VBox()
         
-        self.header = gtk.HBox()
-
-        back_button = gtk.Button("Back")
-        self.header.pack_start(back_button, False, False, 0)
-        back_button.connect('clicked', self.signal_handler, None)
-        back_button.show()        
-
-
         self.line1 = gtk.HBox()
         
         button1 = gtk.Button("Activity")
@@ -100,7 +86,6 @@ class ShowModules(gobject.GObject):
         button6.show()
         button6.get_child().modify_font(pango.FontDescription("Sans 18"))
         
-        self.main_container.add(self.header) 
         self.main_container.add(self.line1) 
         self.main_container.add(self.line2)
         self.main_container.add(self.line3)
@@ -108,7 +93,6 @@ class ShowModules(gobject.GObject):
         self.main_container.add(self.line5)
         self.main_container.add(self.line6)
 
-        self.header.show()   
         self.line1.show() 
         self.line2.show() 
         self.line3.show() 

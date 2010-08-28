@@ -119,8 +119,7 @@ class DevTutorActivity(activity.Activity):
 
     def show_modules(self, sender, data=None):
         
-        self.mod = ShowModules(self.set_canvas)
-        self.mod.connect("back", self.show_options1)
+        self.mod = ShowModules(self.set_canvas)       
         self.mod.show_modules()
 
     def show_activity_list(self, sender, data=None):
