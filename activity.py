@@ -27,6 +27,7 @@ from gettext import gettext as _
 from sugar.activity import activity
 from sugar.graphics.toolbarbox import ToolbarBox
 from sugar.activity.widgets import *
+from sugar.graphics.toolbutton import ToolButton
 
 from helloworld import HelloWorldActivity
 from modules import ShowModules
@@ -57,6 +58,11 @@ class DevTutorActivity(activity.Activity):
         stop_button = StopButton(self)
         toolbar_box.toolbar.insert(stop_button, -1)
         stop_button.show() 
+
+        back_button = BackButton()
+        back_button.connect('clicked', self.show_options1)
+        toolbar_box.toolbar.insert(back_button, 0)
+        back_button.show() 
 
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
@@ -329,4 +335,9 @@ class DevTutorActivity(activity.Activity):
     def launch(self):
         subprocess.Popen(['sugar-launch', 'org.sugarlabs.DevTutor'])
 
-    
+class BackButton(ToolButton):
+    def __init__(self, **kwargs):
+        ToolButton.__init__(self, 'back', **kwargs)
+        self.props.tooltip = _('Back')
+        self.props.accelerator = '<Alt>Left'
+
