@@ -21,27 +21,29 @@ import logging
 import os
 
 # Abiword needs this to happen as soon as possible
-import gobject
-gobject.threads_init()
+from gi.repository import Gtk
+from gi.repository import Gdk
+from gi.repository import Abi
+from gi.repository import GObject
+from gi.repository import GdkPixbuf
+
+GObject.threads_init()
 
 import dbus
-import gtk
 import telepathy
 import telepathy.client
 
-from abiword import Canvas
+from sugar3.activity import activity
+from sugar3.activity.widgets import StopButton
+from sugar3.activity.widgets import ActivityToolbarButton
+from sugar3.activity.activity import get_bundle_path
 
-from sugar.activity import activity
-from sugar.activity.widgets import StopButton
-from sugar.activity.widgets import ActivityToolbarButton
-from sugar.activity.activity import get_bundle_path
+from sugar3.presence import presenceservice
 
-from sugar.presence import presenceservice
-
-from sugar.graphics.toolbarbox import ToolbarButton, ToolbarBox
-from sugar.graphics.toggletoolbutton import ToggleToolButton
-from sugar.graphics.colorbutton import ColorToolButton
-from sugar.graphics import style
+from sugar3.graphics.toolbarbox import ToolbarButton, ToolbarBox
+from sugar3.graphics.toggletoolbutton import ToggleToolButton
+from sugar3.graphics.colorbutton import ColorToolButton
+from sugar3.graphics import style
 
 from toolbar import EditToolbar
 from toolbar import ViewToolbar
@@ -53,7 +55,8 @@ from widgets import ExportButton
 
 logger = logging.getLogger('write-activity')
 
-class AbiWordActivity (activity.Activity):
+
+class AbiWordActivity(activity.Activity):
 
     def __init__ (self, handle):
         if os.path.exists('/tmp/1'):
@@ -64,12 +67,11 @@ class AbiWordActivity (activity.Activity):
             os.chdir(os.path.expanduser('~'))
 
             # create our main abiword canvas
-            self.abiword_canvas = Canvas()
+            self.abiword_canvas = Abi.Widget()
 
             self.set_canvas(self.abiword_canvas)
             self.abiword_canvas.connect_after('map-event', self.__map_event_cb)
             self.abiword_canvas.show()
-
 
         if os.path.exists('/tmp/2'):
             os.remove('/tmp/2')
@@ -77,7 +79,7 @@ class AbiWordActivity (activity.Activity):
 
             activity_button = ActivityToolbarButton(self)
 
-            separator = gtk.SeparatorToolItem()
+            separator = Gtk.SeparatorToolItem()
             separator.show()
             activity_button.props.page.insert(separator, 2)
             export_button = ExportButton(self, self.abiword_canvas)
@@ -97,7 +99,7 @@ class AbiWordActivity (activity.Activity):
             view_toolbar.props.label = _('View')
             toolbar_box.toolbar.insert(view_toolbar, -1)
 
-            separator = gtk.SeparatorToolItem()
+            separator = Gtk.SeparatorToolItem()
             toolbar_box.toolbar.insert(separator, -1)
             toolbar_box.show_all()
             self.set_toolbar_box(toolbar_box)
@@ -129,7 +131,7 @@ class AbiWordActivity (activity.Activity):
             insert_toolbar.props.label = _('Table')
             toolbar_box.toolbar.insert(insert_toolbar, -1)
 
-            separator = gtk.SeparatorToolItem()
+            separator = Gtk.SeparatorToolItem()
             toolbar_box.toolbar.insert(separator, -1)
 
             bold = ToggleToolButton('format-text-bold')
@@ -156,18 +158,18 @@ class AbiWordActivity (activity.Activity):
                     self._setToggleButtonState(underline, b, underline_id))
             toolbar_box.toolbar.insert(underline, -1)
 
-            separator = gtk.SeparatorToolItem()
+            separator = Gtk.SeparatorToolItem()
             toolbar_box.toolbar.insert(separator, -1)
 
             color = ColorToolButton()
             color.connect('color-set', self._text_color_cb, self.abiword_canvas)
-            tool_item = gtk.ToolItem()
+            tool_item = Gtk.ToolItem()
             tool_item.add(color)
             toolbar_box.toolbar.insert(tool_item, -1)
             self.abiword_canvas.connect('color', lambda abi, r, g, b:
-                    color.set_color(gtk.gdk.Color(r * 256, g * 256, b * 256)))
+                    color.set_color(Gdk.Color(r * 65535, g * 65535, b * 65535)))
 
-            separator = gtk.SeparatorToolItem()
+            separator = Gtk.SeparatorToolItem()
             separator.props.draw = False
             separator.set_expand(True)
             separator.show()
@@ -179,14 +181,13 @@ class AbiWordActivity (activity.Activity):
             toolbar_box.show_all()
             self.set_toolbar_box(toolbar_box)
 
-
             self._zoom_handler = self.abiword_canvas.connect("zoom", self.__zoom_cb)
 
     def _text_color_cb(self, button, abiword_canvas):
         newcolor = button.get_color()
         abiword_canvas.set_text_color(int(newcolor.red / 256.0),
-                                            int(newcolor.green / 256.0),
-                                            int(newcolor.blue / 256.0))
+                                      int(newcolor.green / 256.0),
+                                      int(newcolor.blue / 256.0))
 
     def _setToggleButtonState(self, button, b, id):
         button.handler_block(id)
@@ -200,6 +201,7 @@ class AbiWordActivity (activity.Activity):
         def size_allocate_cb(abi, alloc):
             zoom = abi.get_zoom_percentage()
             abi.set_zoom_percentage(zoom)
+
         abi.set_zoom_percentage(zoom)
         abi.connect('size-allocate', size_allocate_cb)
 
@@ -209,12 +211,12 @@ class AbiWordActivity (activity.Activity):
         # set custom keybindings for Write
         logger.debug("Loading keybindings")
         keybindings_file = os.path.join( get_bundle_path(), "keybindings.xml" )
-        self.abiword_canvas.invoke_cmd(
+        self.abiword_canvas.invoke_ex(
                 'com.abisource.abiword.loadbindings.fromURI',
                 keybindings_file, 0, 0)
 
         # no ugly borders please
-        self.abiword_canvas.set_property("shadow-type", gtk.SHADOW_NONE)
+        ##self.abiword_canvas.set_property("shadow-type", gtk.SHADOW_NONE)
 
         # we only do per-word selections (when using the mouse)
         self.abiword_canvas.set_word_selections(True)
@@ -255,7 +257,7 @@ class AbiWordActivity (activity.Activity):
 
         pixbuf = self.abiword_canvas.render_page_to_image(1)
         pixbuf = pixbuf.scale_simple(style.zoom(300), style.zoom(225),
-                                     gtk.gdk.INTERP_BILINEAR)
+                                     GdkPixbuf.InterpType.BILINEAR)
 
         preview_data = []
         def save_func(buf, data):
@@ -377,13 +379,13 @@ class AbiWordActivity (activity.Activity):
                 address = self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES].GetDBusTubeAddress(id)
                 if self.joined:
                     logger.debug('Passing tube address to abicollab (join): %s', address)
-                    self.abiword_canvas.invoke_cmd('com.abisource.abiword.abicollab.olpc.joinTube', address, 0, 0)
+                    self.abiword_canvas.invoke_ex('com.abisource.abiword.abicollab.olpc.joinTube', address, 0, 0)
                     if initiator_path is not None:
                         logger.debug('Adding the initiator to the session: %s', initiator_path)
-                        self.abiword_canvas.invoke_cmd('com.abisource.abiword.abicollab.olpc.buddyJoined', initiator_path, 0, 0)
+                        self.abiword_canvas.invoke_ex('com.abisource.abiword.abicollab.olpc.buddyJoined', initiator_path, 0, 0)
                 else:
                     logger.debug('Passing tube address to abicollab (offer): %s', address)
-                    self.abiword_canvas.invoke_cmd('com.abisource.abiword.abicollab.olpc.offerTube', address, 0, 0)
+                    self.abiword_canvas.invoke_ex('com.abisource.abiword.abicollab.olpc.offerTube', address, 0, 0)
 
             self.tubes_chan[telepathy.CHANNEL_TYPE_TUBES].connect_to_signal('DBusNamesChanged',
                 self._on_dbus_names_changed)
@@ -397,7 +399,7 @@ class AbiWordActivity (activity.Activity):
 #        if tube_id == self.tube_id:
         for handle, bus_name in added:
             logger.debug('added handle: %s, with dbus_name: %s', handle, bus_name)
-            self.abiword_canvas.invoke_cmd('com.abisource.abiword.abicollab.olpc.buddyJoined', bus_name, 0, 0)
+            self.abiword_canvas.invoke_ex('com.abisource.abiword.abicollab.olpc.buddyJoined', bus_name, 0, 0)
             self.participants[handle] = bus_name
 
 #            if handle == self.self_handle:
@@ -423,21 +425,21 @@ class AbiWordActivity (activity.Activity):
 
             logger.debug('removed handle: %d, with dbus name: %s', handle,
                          bus_name)
-            self.abiword_canvas.invoke_cmd('com.abisource.abiword.abicollab.olpc.buddyLeft', bus_name, 0, 0)
+            self.abiword_canvas.invoke_ex('com.abisource.abiword.abicollab.olpc.buddyLeft', bus_name, 0, 0)
 
     def _buddy_joined_cb (self, activity, buddy):
         logger.debug('buddy joined with object path: %s', buddy.object_path())
-#        self.abiword_canvas.invoke_cmd('com.abisource.abiword.abicollab.olpc.buddyJoined', buddy.object_path(), 0, 0)
+#        self.abiword_canvas.invoke_ex('com.abisource.abiword.abicollab.olpc.buddyJoined', buddy.object_path(), 0, 0)
 
     def _buddy_left_cb (self,  activity, buddy):
         logger.debug('buddy left with object path: %s', buddy.object_path())
-        #self.abiword_canvas.invoke_cmd('com.abisource.abiword.abicollab.olpc.buddyLeft', self.participants[buddy.object_path()], 0, 0)
+        #self.abiword_canvas.invoke_ex('com.abisource.abiword.abicollab.olpc.buddyLeft', self.participants[buddy.object_path()], 0, 0)
 
     def read_file(self, file_path):
         logging.debug('AbiWordActivity.read_file: %s, mimetype: %s', file_path, self.metadata['mime_type'])
         if 'source' in self.metadata and self.metadata['source'] == '1':
             logger.debug('Opening file in view source mode')
-            self.abiword_canvas.load_file('file://' + file_path, 'text/plain') 
+            self.abiword_canvas.load_file('file://' + file_path, 'text/plain')
         else:
             self.abiword_canvas.load_file('file://' + file_path, '') # we pass no mime/file type, let libabiword autodetect it, so we can handle multiple file formats
 
@@ -459,3 +461,4 @@ class AbiWordActivity (activity.Activity):
 
         self.metadata['fulltext'] = self.abiword_canvas.get_content(extension_or_mimetype=".txt")[:3000]
         self.abiword_canvas.save('file://' + file_path, actual_mimetype, '')
+

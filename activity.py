@@ -16,29 +16,29 @@
 
 """DevTutor Activity: A case study for developing an activity."""
 
-import gtk
 import logging
 import telepathy
 
-import gconf
-
-import pango
 import os
 import subprocess
 
 from gettext import gettext as _
 
+from gi.repository import Gtk
+from gi.repository import GConf
+from gi.repository import Pango
+
 from dbus.service import method, signal
 from dbus.gobject_service import ExportedGObject
 
-from sugar.activity import activity
-from sugar.graphics.alert import Alert
-from sugar.graphics.toolbarbox import ToolbarBox
-from sugar.activity.widgets import *
-from sugar.graphics.toolbutton import ToolButton
+from sugar3.activity import activity
+from sugar3.graphics.alert import Alert
+from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.activity.widgets import *
+from sugar3.graphics.toolbutton import ToolButton
 
-from sugar.presence import presenceservice
-from sugar.presence.tubeconn import TubeConnection
+from sugar3.presence import presenceservice
+from sugar3.presence.tubeconn import TubeConnection
 
 SERVICE = "org.laptop.DevTutor"
 IFACE = SERVICE
@@ -48,11 +48,11 @@ from helloworld import HelloWorldActivity
 from modules import ShowModules
 from AbiWordActivity import *
 
+
 class DevTutorActivity(activity.Activity):
     """DevTutorActivity class as specified in activity.info"""    
 
     def __init__(self, handle):
-      
         activity.Activity.__init__(self, handle)
              
         self.max_participants = 10
@@ -107,17 +107,17 @@ class DevTutorActivity(activity.Activity):
 
     def show_options(self):         
         
-        self.main_container = gtk.VBox()
+        self.main_container = Gtk.VBox()
 
         self.add_padding()   
-        self.line1 = gtk.HBox()
+        self.line1 = Gtk.HBox()
         
-        button1 = gtk.Button("Show modules")
+        button1 = Gtk.Button("Show modules")
         #button1.set_size_request(200,80)
         #self.line1.pack_start(button1, False, False, 0)
         self.line1.add(button1)
         button1.connect('clicked', self.show_modules, None)
-        button1.get_child().modify_font(pango.FontDescription("Sans 14"))
+        button1.get_child().modify_font(Pango.FontDescription("Sans 14"))
         button1.show()
         
         self.main_container.add(self.line1) 
@@ -125,22 +125,22 @@ class DevTutorActivity(activity.Activity):
 
         self.add_padding()
 
-        self.line2 = gtk.HBox()        
-        button2 = gtk.Button("Show activities")
+        self.line2 = Gtk.HBox()
+        button2 = Gtk.Button("Show activities")
         #button2.set_size_request(200,80)
         #self.line2.pack_start(button2, False, False, 0)
         self.line2.add(button2)
         button2.connect('clicked', self.show_activity_list, None)
-        button2.get_child().modify_font(pango.FontDescription("Sans 14"))
+        button2.get_child().modify_font(Pango.FontDescription("Sans 14"))
         button2.show()
         
         self.main_container.add(self.line2)
         self.line2.show()
         self.add_padding()
 
-        self.line3 = gtk.HBox()
-        text = gtk.TextView()
-        self.entry = gtk.Entry()
+        self.line3 = Gtk.HBox()
+        text = Gtk.TextView()
+        self.entry = Gtk.Entry()
         self.entry.set_sensitive(True)
         self.entry.connect('activate', self.entry_activate_cb)
 
@@ -154,11 +154,11 @@ class DevTutorActivity(activity.Activity):
         self.main_container.show()             
     
     def add_padding(self):
-        self.line_space1 = gtk.HBox()           
+        self.line_space1 = Gtk.HBox()
         self.main_container.add(self.line_space1) 
         self.line_space1.show()
 
-        self.line_space2 = gtk.HBox()     
+        self.line_space2 = Gtk.HBox()
         self.main_container.add(self.line_space2) 
         self.line_space2.show()
 
@@ -169,31 +169,31 @@ class DevTutorActivity(activity.Activity):
 
     def show_activity_list(self, sender, data=None):
         self.back_button.connect('clicked', self.show_options1)
-        self.main_container = gtk.VBox()
+        self.main_container = Gtk.VBox()
 
         self.add_padding()   
-        self.line1 = gtk.HBox()
+        self.line1 = Gtk.HBox()
         
-        button1 = gtk.Button("Hello World activity")
+        button1 = Gtk.Button("Hello World activity")
         #button1.set_size_request(200,80)
         #self.line1.pack_start(button1, False, False, 0)
         self.line1.add(button1)
         button1.connect('clicked', self.show_labels_hello, None)
-        button1.get_child().modify_font(pango.FontDescription("Sans 14"))
+        button1.get_child().modify_font(Pango.FontDescription("Sans 14"))
         button1.show()
         
         self.main_container.add(self.line1) 
         self.line1.show()
 
         self.add_padding()
-        self.line2 = gtk.HBox()
+        self.line2 = Gtk.HBox()
         
-        button2 = gtk.Button("Write activity")
+        button2 = Gtk.Button("Write activity")
         #button2.set_size_request(200,80)
         #self.line2.pack_start(button2, False, False, 0)
         self.line2.add(button2)
         button2.connect('clicked', self.show_labels_write, None)
-        button2.get_child().modify_font(pango.FontDescription("Sans 14"))
+        button2.get_child().modify_font(Pango.FontDescription("Sans 14"))
         button2.show()
         
         self.main_container.add(self.line2)
@@ -205,79 +205,79 @@ class DevTutorActivity(activity.Activity):
     
     def show_labels_hello(self, sender, data=None):
         self.back_button.connect('clicked', self.show_activity_list)
-        self.main_container = gtk.VBox()
+        self.main_container = Gtk.VBox()
         
         self.add_padding()
-        self.line1 = gtk.HBox()
+        self.line1 = Gtk.HBox()
         
-        self.label1 = gtk.Label(_("Hello World activity step 1 - call activity.__init__"))
+        self.label1 = Gtk.Label(_("Hello World activity step 1 - call activity.__init__"))
         self.label1.set_line_wrap( True )
-        self.label1.modify_font(pango.FontDescription("Sans 12"))
+        self.label1.modify_font(Pango.FontDescription("Sans 12"))
         self.line1.add(self.label1)
         self.label1.show()
 
-        button1 = gtk.Button("Show result")
+        button1 = Gtk.Button("Show result")
         button1.set_size_request(200,80)
         self.line1.pack_start(button1, False, False, 0)
         button1.connect('clicked', self.hello_launch1, None)
-        button1.get_child().modify_font(pango.FontDescription("Sans 14"))
+        button1.get_child().modify_font(Pango.FontDescription("Sans 14"))
         button1.show()
         
         self.main_container.add(self.line1)
         self.line1.show()
 
         self.add_padding()
-        self.line2 = gtk.HBox()
+        self.line2 = Gtk.HBox()
         
-        self.label2 = gtk.Label(_("Hello Word activity step 2 - add toolbox"))
+        self.label2 = Gtk.Label(_("Hello Word activity step 2 - add toolbox"))
         self.label2.set_line_wrap( True )
-        self.label2.modify_font(pango.FontDescription("Sans 12"))
+        self.label2.modify_font(Pango.FontDescription("Sans 12"))
         self.line2.add(self.label2)
         self.label2.show()
 
-        button2 = gtk.Button("Show result")
+        button2 = Gtk.Button("Show result")
         button2.set_size_request(200,80)
         self.line2.pack_start(button2, False, False, 0)
         button2.connect('clicked', self.hello_launch2, None)
-        button2.get_child().modify_font(pango.FontDescription("Sans 14"))
+        button2.get_child().modify_font(Pango.FontDescription("Sans 14"))
         button2.show()
         
         self.main_container.add(self.line2)
         self.line2.show()
 
         self.add_padding()                        
-        self.line3 = gtk.HBox()
+        self.line3 = Gtk.HBox()
         
-        self.label3 = gtk.Label(_("Hello World activity step 3 - add hello world label"))
+        self.label3 = Gtk.Label(_("Hello World activity step 3 - add hello world label"))
         self.label3.set_line_wrap( True )
-        self.label3.modify_font(pango.FontDescription("Sans 12"))
+        self.label3.modify_font(Pango.FontDescription("Sans 12"))
         self.line3.add(self.label3)
         self.label3.show()   
 
-        button3 = gtk.Button("Show result")
+        button3 = Gtk.Button("Show result")
         button3.set_size_request(200,80)
         self.line3.pack_start(button3, False, False, 0)
         button3.connect('clicked', self.hello_launch3, None)
-        button3.get_child().modify_font(pango.FontDescription("Sans 14"))
+        button3.get_child().modify_font(Pango.FontDescription("Sans 14"))
         button3.show()
         
         self.main_container.add(self.line3) 
         self.line3.show()
 
         self.add_padding()
-        self.line4 = gtk.HBox()
+        self.line4 = Gtk.HBox()
         
-        self.label4 = gtk.Label(_("Hello World activity step 4 - add rotate button"))
+        self.label4 = Gtk.Label(_("Hello World activity step 4 - add rotate button"))
         self.label4.set_line_wrap( True )
-        self.label4.modify_font(pango.FontDescription("Sans 12"))
+        self.label4.modify_font(Pango.FontDescription("Sans 12"))
         self.line4.add(self.label4)
         self.label4.show()   
 
-        button4 = gtk.Button("Show result")
+        button4 = Gtk.Button("Show result")
         button4.set_size_request(200,80)
         self.line4.pack_start(button4, False, False, 0)
         button4.connect('clicked', self.hello_launch4, None)
-        button4.get_child().modify_font(pango.FontDescription("Sans 14"))
+        button4.get_child().modify_font(Pango.FontDescription("Sans 14"))
         button4.show()
         
         self.main_container.add(self.line4) 
@@ -285,64 +285,63 @@ class DevTutorActivity(activity.Activity):
 
         self.add_padding()
         self.set_canvas(self.main_container)
-        self.main_container.show()         
-         
+        self.main_container.show()
 
-    def show_labels_write(self, sender, data=None):  
-        self.back_button.connect('clicked', self.show_activity_list)       
-        self.main_container = gtk.VBox()
-        self.add_padding()        
-        self.line1 = gtk.HBox()
-        
-        self.label1 = gtk.Label(_("Write activity step 1 "))
+    def show_labels_write(self, sender, data=None):
+        self.back_button.connect('clicked', self.show_activity_list)
+        self.main_container = Gtk.VBox()
+        self.add_padding()
+        self.line1 = Gtk.HBox()
+
+        self.label1 = Gtk.Label(_("Write activity step 1 "))
         self.label1.set_line_wrap( True )
-        self.label1.modify_font(pango.FontDescription("Sans 12"))
+        self.label1.modify_font(Pango.FontDescription("Sans 12"))
         self.line1.add(self.label1)
         self.label1.show()
 
-        button1 = gtk.Button("Show result")
+        button1 = Gtk.Button("Show result")
         button1.set_size_request(200,80)
         self.line1.pack_start(button1, False, False, 0)
         button1.connect('clicked', self.write_launch1, None)
-        button1.get_child().modify_font(pango.FontDescription("Sans 14"))
+        button1.get_child().modify_font(Pango.FontDescription("Sans 14"))
         button1.show()
-        
+
         self.main_container.add(self.line1)
         self.line1.show()
         self.add_padding()
-        self.line2 = gtk.HBox()
-        
-        self.label2 = gtk.Label(_("Write activity step 2"))
+        self.line2 = Gtk.HBox()
+
+        self.label2 = Gtk.Label(_("Write activity step 2"))
         self.label2.set_line_wrap( True )
-        self.label2.modify_font(pango.FontDescription("Sans 12"))
+        self.label2.modify_font(Pango.FontDescription("Sans 12"))
         self.line2.add(self.label2)
         self.label2.show()
 
-        button2 = gtk.Button("Show result")
+        button2 = Gtk.Button("Show result")
         button2.set_size_request(200,80)
         self.line2.pack_start(button2, False, False, 0)
         button2.connect('clicked', self.write_launch2, None)
-        button2.get_child().modify_font(pango.FontDescription("Sans 14"))
+        button2.get_child().modify_font(Pango.FontDescription("Sans 14"))
         button2.show()
-        
+
         self.main_container.add(self.line2)
         self.line2.show()
 
         self.set_canvas(self.main_container)
         self.add_padding()
-        self.line3 = gtk.HBox()
-        
-        self.label3 = gtk.Label(_("Write activity step 3"))
+        self.line3 = Gtk.HBox()
+
+        self.label3 = Gtk.Label(_("Write activity step 3"))
         self.label3.set_line_wrap( True )
-        self.label3.modify_font(pango.FontDescription("Sans 12"))
+        self.label3.modify_font(Pango.FontDescription("Sans 12"))
         self.line3.add(self.label3)
         self.label3.show()   
 
-        button3 = gtk.Button("Show result")
+        button3 = Gtk.Button("Show result")
         button3.set_size_request(200,80)
         self.line3.pack_start(button3, False, False, 0)
         button3.connect('clicked', self.write_launch3, None)
-        button3.get_child().modify_font(pango.FontDescription("Sans 14"))
+        button3.get_child().modify_font(Pango.FontDescription("Sans 14"))
         button3.show()
         
         self.main_container.add(self.line3) 
@@ -367,8 +366,7 @@ class DevTutorActivity(activity.Activity):
     def hello_launch4(self, sender, data=None):
         f = open('/tmp/4', 'w')
         self.hello_launch3(sender, data)
-         
-    
+
     def write_launch1(self, sender, data=None):
         f = open('/tmp/1', 'w')
         os.putenv('TUTOR_CLASS','AbiWordActivity')
@@ -385,7 +383,6 @@ class DevTutorActivity(activity.Activity):
     def launch(self):
         subprocess.Popen(['sugar-launch', 'org.sugarlabs.DevTutor'])
 
-       
     def entry_activate_cb(self, entry):
         """Handle the event when Enter is pressed in the Entry."""
         text = entry.props.text
@@ -621,7 +618,7 @@ class TextSync(ExportedGObject):
         """Send some text to all participants."""
         self.text = text
         self._logger.debug('Sent text: %s', text)
-        client = gconf.client_get_default()
+        client = GConf.Client.get_default()
         Text = client.get_string("/desktop/sugar/user/nick")
         self._alert(Text, '%s' % text)
 

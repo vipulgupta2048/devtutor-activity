@@ -18,16 +18,18 @@ import time
 from gettext import gettext as _
 import logging
 
-from sugar.graphics.radiotoolbutton import RadioToolButton
-from sugar.graphics.combobox import ComboBox
-from sugar.graphics.palette import Palette
-from sugar.graphics.toolbutton import ToolButton
-from sugar.graphics.menuitem import MenuItem
-from sugar.datastore import datastore
+from sugar3.graphics.radiotoolbutton import RadioToolButton
+from sugar3.graphics.combobox import ComboBox
+from sugar3.graphics.palette import Palette
+from sugar3.graphics.toolbutton import ToolButton
+from sugar3.graphics.menuitem import MenuItem
+from sugar3.datastore import datastore
 
 logger = logging.getLogger('write-activity')
 
+
 class FontCombo(ComboBox):
+
     def __init__(self, abi):
         ComboBox.__init__(self)
 
@@ -85,7 +87,9 @@ class FontCombo(ComboBox):
             self.set_active(font_index)
             self.handler_unblock(self._fonts_changed_id)
 
+
 class FontSizeCombo(ComboBox):
+
     def __init__(self, abi):
         ComboBox.__init__(self)
 
@@ -120,7 +124,9 @@ class FontSizeCombo(ComboBox):
                 self.handler_unblock(self._changed_id)
                 break
 
+
 class AbiButton(RadioToolButton):
+
     def __init__(self, abi, abi_signal, do_abi_cb, on_abi_cb=None, **kwargs):
         RadioToolButton.__init__(self, **kwargs)
 
@@ -152,7 +158,9 @@ class AbiButton(RadioToolButton):
         finally:
             self.handler_unblock(self._toggled_handler)
 
+
 class ExportButton(ToolButton):
+
     _EXPORT_FORMATS = [{'mime_type' : 'application/rtf',
                         'title'     : _('Rich Text (RTF)'),
                         'jpostfix'  : _('RTF'),
@@ -225,3 +233,4 @@ class ExportButton(ToolButton):
         datastore.write(fileObject, transfer_ownership=True)
         fileObject.destroy()
         del fileObject
+

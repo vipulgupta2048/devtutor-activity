@@ -1,14 +1,16 @@
-import gobject
 import logging
-
 import os, sys
 
 sys.path.append(os.path.join(os.environ['SUGAR_BUNDLE_PATH'], 'epubview'))
 import epubview
 
+from gi.repository import Gtk
+
 _logger = logging.getLogger('read-activity')
 
+
 class View(epubview.EpubView):
+
     def __init__(self):
         epubview.EpubView.__init__(self)
 
@@ -33,7 +35,7 @@ class View(epubview.EpubView):
         if self._ready:
             self._load_page(n)
         else:
-            gobject.timeout_add(200, self._try_load_page, n)
+            GObject.timeout_add(200, self._try_load_page, n)
 
     def get_current_page(self):
         return int(self._loaded_page - 1)
@@ -46,6 +48,7 @@ class View(epubview.EpubView):
 
 
 class EpubDocument(epubview.Epub):
+
     def __init__(self, view, docpath):
         epubview.Epub.__init__(self, docpath)
         self._page_cache = view
@@ -62,6 +65,9 @@ class EpubDocument(epubview.Epub):
     def get_links_model(self):
         return self.get_toc_model()
 
+
 class JobFind(epubview.JobFind):
+
     def __init__(self, document, start_page, n_pages, text, case_sensitive=False):
         epubview.JobFind.__init__(self, document, start_page, n_pages, text, case_sensitive=False)
+

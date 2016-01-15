@@ -14,17 +14,19 @@
 
 """Object chooser method"""
 
-import gtk
 import logging
 
-from sugar import mime
-from sugar.graphics.objectchooser import ObjectChooser
+from gi.repository import Gtk
+
+from sugar3 import mime
+from sugar3.graphics.objectchooser import ObjectChooser
 
 TEXT  = hasattr(mime, 'GENERIC_TYPE_TEXT') and mime.GENERIC_TYPE_TEXT or None
 IMAGE = hasattr(mime, 'GENERIC_TYPE_IMAGE') and mime.GENERIC_TYPE_IMAGE or None
 AUDIO = hasattr(mime, 'GENERIC_TYPE_AUDIO') and mime.GENERIC_TYPE_AUDIO or None
 VIDEO = hasattr(mime, 'GENERIC_TYPE_VIDEO') and mime.GENERIC_TYPE_VIDEO or None
 LINK  = hasattr(mime, 'GENERIC_TYPE_LINK') and mime.GENERIC_TYPE_LINK or None
+
 
 def pick(cb=None, default=None, parent=None, what=None):
     """
@@ -45,7 +47,7 @@ def pick(cb=None, default=None, parent=None, what=None):
     out = None
 
     try:
-        if chooser.run() == gtk.RESPONSE_ACCEPT:
+        if chooser.run() == Gtk.ResponseType.ACCEPT:
             jobject = chooser.get_selected_object()
             logging.debug('ObjectChooser: %r' % jobject)
 
@@ -54,9 +56,11 @@ def pick(cb=None, default=None, parent=None, what=None):
                     out = cb(jobject)
                 else:
                     out = jobject
+
     finally:
         if jobject and id(jobject) != id(out):
             jobject.destroy()
+
         chooser.destroy()
         del chooser
 
@@ -64,3 +68,4 @@ def pick(cb=None, default=None, parent=None, what=None):
         return out
     else:
         return default
+

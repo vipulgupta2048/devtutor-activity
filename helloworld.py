@@ -16,20 +16,19 @@
 
 """HelloWorld Activity: A case study for developing an activity."""
 
-import gtk
 import logging
 import os
-
 from gettext import gettext as _
 
-from sugar.activity import activity
-from sugar.graphics.toolbarbox import ToolbarBox
-from sugar.activity.widgets import ActivityButton
-from sugar.activity.widgets import ActivityToolbox
-from sugar.activity.widgets import TitleEntry
-from sugar.activity.widgets import StopButton
-from sugar.activity.widgets import ShareButton
-from sugar.activity.widgets import KeepButton
+from gi.repository import Gtk
+
+from sugar3.activity import activity
+from sugar3.graphics.toolbarbox import ToolbarBox
+from sugar3.activity.widgets import ActivityButton
+from sugar3.activity.widgets import TitleEntry
+from sugar3.activity.widgets import StopButton
+from sugar3.activity.widgets import ShareButton
+
 
 class HelloWorldActivity(activity.Activity):
     """HelloWorldActivity class as specified in activity.info"""
@@ -41,7 +40,6 @@ class HelloWorldActivity(activity.Activity):
             os.remove('/tmp/1')
             """Set up the HelloWorld activity."""
             activity.Activity.__init__(self, handle)
-
 
         if os.path.exists('/tmp/2'):
             os.remove('/tmp/2')
@@ -65,11 +63,11 @@ class HelloWorldActivity(activity.Activity):
             toolbar_box.toolbar.insert(share_button, -1)
             share_button.show()
 
-            keep_button = KeepButton(self)
-            toolbar_box.toolbar.insert(keep_button, -1)
-            keep_button.show()
-        
-            separator = gtk.SeparatorToolItem()
+            ##keep_button = KeepButton(self)
+            ##toolbar_box.toolbar.insert(keep_button, -1)
+            ##keep_button.show()
+
+            separator = Gtk.SeparatorToolItem()
             separator.props.draw = False
             separator.set_expand(True)
             toolbar_box.toolbar.insert(separator, -1)
@@ -81,42 +79,37 @@ class HelloWorldActivity(activity.Activity):
 
             self.set_toolbar_box(toolbar_box)
             toolbar_box.show()
-            self.container = gtk.VBox()
+            self.container = Gtk.VBox()
             self.container.show() 
             self.set_canvas(self.container)
 
         if os.path.exists('/tmp/3'):
             os.remove('/tmp/3')   
-            self.label = gtk.Label(_("Hello World!"))
+            self.label = Gtk.Label(_("Hello World!"))
             self.container.add(self.label)  
             self.label.set_angle(self.angle)
             self.label.show()    
-            
+
         if os.path.exists('/tmp/4'):
             os.remove('/tmp/4')      
-            self.button = gtk.Button("Rotate")
+            self.button = Gtk.Button("Rotate")
             self.container.add(self.button)
             self.button.connect('clicked', self.hello, None)
             self.button.show()
-            
 
     def hello(self, sender, data=None):
-
         # label with the text, make the string translatable
-        
-        self.container.remove(self.label) 
+
+        self.container.remove(self.label)
         self.angle = self.angle + 30
-        self.label.set_text("Hello World!") 
+        self.label.set_text("Hello World!")
         self.container.add(self.label)  
         self.label.set_angle(self.angle)
         self.label.show()
 
         self.container.remove(self.button) 
-        self.button = gtk.Button("Rotate")
+        self.button = Gtk.Button("Rotate")
         self.container.add(self.button)
         self.button.connect('clicked', self.hello, None)
         self.button.show()
-     
-        
 
- 
