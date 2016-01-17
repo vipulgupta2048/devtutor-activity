@@ -34,7 +34,8 @@ from dbus.gobject_service import ExportedGObject
 from sugar3.activity import activity
 from sugar3.graphics.alert import Alert
 from sugar3.graphics.toolbarbox import ToolbarBox
-from sugar3.activity.widgets import *
+from sugar3.activity.widgets import ActivityToolbarButton
+from sugar3.activity.widgets import StopButton
 from sugar3.graphics.toolbutton import ToolButton
 
 from sugar3.presence import presenceservice
@@ -60,26 +61,24 @@ class DevTutorActivity(activity.Activity):
         # toolbar with the new toolbar redesign
         toolbar_box = ToolbarBox()
 
-        activity_button = ActivityButton(self)
+        activity_button = ActivityToolbarButton(self)
         toolbar_box.toolbar.insert(activity_button, 0)
         activity_button.show()
 
-        title_entry = TitleEntry(self)
-        toolbar_box.toolbar.insert(title_entry, -1)
-        title_entry.show()
-
-        share_button = ShareButton(self)
-        toolbar_box.toolbar.insert(share_button, -1)
-        share_button.show() 
-            
-        stop_button = StopButton(self)
-        toolbar_box.toolbar.insert(stop_button, -1)
-        stop_button.show() 
-
         self.back_button = BackButton()
         self.back_button.connect('clicked', self.show_options1)
-        toolbar_box.toolbar.insert(self.back_button, 0)
-        self.back_button.show() 
+        toolbar_box.toolbar.insert(self.back_button, -1)
+        self.back_button.show()
+
+        separator = Gtk.SeparatorToolItem()
+        separator.props.draw = False
+        separator.set_expand(True)
+        toolbar_box.toolbar.insert(separator, -1)
+        separator.show()
+
+        stop_button = StopButton(self)
+        toolbar_box.toolbar.insert(stop_button, -1)
+        stop_button.show()
 
         self.set_toolbar_box(toolbar_box)
         toolbar_box.show()
@@ -100,18 +99,16 @@ class DevTutorActivity(activity.Activity):
 
         self.connect('shared', self._shared_cb)
         self.connect('joined', self._joined_cb)
-       
 
-    def show_options1(self, data=None):   
+    def show_options1(self, data=None):
         self.show_options()
 
-    def show_options(self):         
-        
+    def show_options(self):
         self.main_container = Gtk.VBox()
 
-        self.add_padding()   
+        self.add_padding()
         self.line1 = Gtk.HBox()
-        
+
         button1 = Gtk.Button("Show modules")
         #button1.set_size_request(200,80)
         #self.line1.pack_start(button1, False, False, 0)
@@ -120,7 +117,7 @@ class DevTutorActivity(activity.Activity):
         button1.get_child().modify_font(Pango.FontDescription("Sans 14"))
         button1.show()
         
-        self.main_container.add(self.line1) 
+        self.main_container.add(self.line1)
         self.line1.show()
 
         self.add_padding()
@@ -163,8 +160,7 @@ class DevTutorActivity(activity.Activity):
         self.line_space2.show()
 
     def show_modules(self, sender, data=None):
-        
-        self.mod = ShowModules(self.set_canvas)       
+        self.mod = ShowModules(self.set_canvas)
         self.mod.show_modules()
 
     def show_activity_list(self, sender, data=None):
@@ -396,6 +392,7 @@ class DevTutorActivity(activity.Activity):
     def _alert(self, title, text=None):
         try:
             self.remove_alert(self.alert)
+
         finally:
             self.alert = Alert()
             self.alert.props.title = title
@@ -511,20 +508,26 @@ class DevTutorActivity(activity.Activity):
         if my_csh == cs_handle:
             handle = self.conn.GetSelfHandle()
             self._logger.debug('CS handle %u belongs to me, %u', cs_handle, handle)
+
         elif group.GetGroupFlags() & telepathy.CHANNEL_GROUP_FLAG_CHANNEL_SPECIFIC_HANDLES:
             handle = group.GetHandleOwners([cs_handle])[0]
             self._logger.debug('CS handle %u belongs to %u', cs_handle, handle)
+
         else:
             handle = cs_handle
             self._logger.debug('non-CS handle %u belongs to itself', handle)
             # XXX: deal with failure to get the handle owner
             assert handle != 0
+
         return self.pservice.get_buddy_by_telepathy_handle(
             self.conn.service_name, self.conn.object_path, handle)
 
+
 class BackButton(ToolButton):
+
     def __init__(self, **kwargs):
         ToolButton.__init__(self, 'back', **kwargs)
+
         self.props.tooltip = _('Back')
         self.props.accelerator = '<Alt>Left'
 

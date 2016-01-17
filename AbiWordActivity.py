@@ -40,7 +40,8 @@ from sugar3.activity.activity import get_bundle_path
 
 from sugar3.presence import presenceservice
 
-from sugar3.graphics.toolbarbox import ToolbarButton, ToolbarBox
+from sugar3.graphics.toolbarbox import ToolbarButton
+from sugar3.graphics.toolbarbox import ToolbarBox
 from sugar3.graphics.toggletoolbutton import ToggleToolButton
 from sugar3.graphics.colorbutton import ColorToolButton
 from sugar3.graphics import style
@@ -60,6 +61,7 @@ class AbiWordActivity(activity.Activity):
 
     def __init__ (self, handle):
         if os.path.exists('/tmp/1'):
+            print("TEMP1")
             os.remove('/tmp/1')
             activity.Activity.__init__ (self, handle)
 
@@ -74,6 +76,7 @@ class AbiWordActivity(activity.Activity):
             self.abiword_canvas.show()
 
         if os.path.exists('/tmp/2'):
+            print("TEMP2")
             os.remove('/tmp/2')
             toolbar_box = ToolbarBox()
 
@@ -105,6 +108,7 @@ class AbiWordActivity(activity.Activity):
             self.set_toolbar_box(toolbar_box)
 
         if os.path.exists('/tmp/3'):
+            print("TEMP3")
             os.remove('/tmp/3')    
 
             text_toolbar = ToolbarButton()

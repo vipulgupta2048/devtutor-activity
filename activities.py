@@ -18,7 +18,6 @@ from sugar3.activity.widgets import *
 
 class ShowActivities(GObject.GObject):
 
-
     def __init__(self, canvas):
         GObject.GObject.__init__(self)
         self.set_canvas = canvas
