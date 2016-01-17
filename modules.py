@@ -185,7 +185,7 @@ class ShowModules(GObject.GObject):
         self.heading()
         self.add_line1()        
         #self.add_line2()
-        self.add_line3()        
+        ##self.add_line3()
         #self.add_line4()
         self.add_line5()        
         self.add_line6()
@@ -255,72 +255,50 @@ class ShowModules(GObject.GObject):
         self.container.add(self.line) 
         self.line.show() 
     
-    def add_line3(self):
-        self.line = Gtk.HBox()
-        
-        self.label = Gtk.Label(_("sugar.activity.widgets.KeepButton()"))
-        self.line.add(self.label)  
-        self.label.show()    
-       
-        toolbar_box1 = ToolbarBox()        
-        self.line.add(toolbar_box1) 
-        toolbar_box1.show()
-        
-        title_entry1 = KeepButton(self)
-        toolbar_box1.toolbar.insert(title_entry1, 0)
-        title_entry1.show()
-         
-        self.label1 = Gtk.Label(_("Some Description"))
-        self.line.add(self.label1)          
-        self.label1.show()    
-        
-        self.container.add(self.line) 
-        self.line.show() 
-    
     def add_line4(self):
         self.line = Gtk.HBox()
-        
+
         self.label = Gtk.Label(_("sugar.activity.widgets.ShareButton()"))
-        self.line.add(self.label)  
-        self.label.show()    
-       
-        toolbar_box1 = ToolbarBox()        
-        self.line.add(toolbar_box1) 
+        self.line.add(self.label)
+        self.label.show()
+
+        toolbar_box1 = ToolbarBox()
+        self.line.add(toolbar_box1)
         toolbar_box1.show()
-        
+
         title_entry1 = ShareButton(self)
         toolbar_box1.toolbar.insert(title_entry1, 0)
         title_entry1.show()
-         
+
         self.label1 = Gtk.Label(_("Some Description"))
-        self.line.add(self.label1)          
-        self.label1.show()    
-       
-        self.container.add(self.line) 
-        self.line.show() 
-    
+        self.line.add(self.label1)
+        self.label1.show()
+
+        self.container.add(self.line)
+        self.line.show()
+
     def add_line5(self):
         self.line = Gtk.HBox()
-        
+
         self.label = Gtk.Label(_("sugar.activity.widgets.RedoButton()"))
-        self.line.add(self.label)  
-        self.label.show()    
-       
-        toolbar_box1 = ToolbarBox()        
-        self.line.add(toolbar_box1) 
+        self.line.add(self.label)
+        self.label.show()
+
+        toolbar_box1 = ToolbarBox()
+        self.line.add(toolbar_box1)
         toolbar_box1.show()
-        
+
         title_entry1 = RedoButton()
         toolbar_box1.toolbar.insert(title_entry1, 0)
         title_entry1.show()
-         
+
         self.label1 = Gtk.Label(_("Some Description"))
-        self.line.add(self.label1)          
-        self.label1.show()    
-       
-        self.container.add(self.line) 
-        self.line.show() 
-    
+        self.line.add(self.label1)
+        self.label1.show()
+
+        self.container.add(self.line)
+        self.line.show()
+
     def add_line6(self):
         self.line = Gtk.HBox()
         

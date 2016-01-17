@@ -79,37 +79,37 @@ class HelloWorldActivity(activity.Activity):
 
             self.set_toolbar_box(toolbar_box)
             toolbar_box.show()
-            self.container = Gtk.VBox()
-            self.container.show() 
-            self.set_canvas(self.container)
+            self.container_vbox = Gtk.VBox()
+            self.container_vbox.show()
+            self.set_canvas(self.container_vbox)
 
         if os.path.exists('/tmp/3'):
             os.remove('/tmp/3')   
             self.label = Gtk.Label(_("Hello World!"))
-            self.container.add(self.label)  
+            self.container_vbox.add(self.label)
             self.label.set_angle(self.angle)
             self.label.show()    
 
         if os.path.exists('/tmp/4'):
             os.remove('/tmp/4')      
             self.button = Gtk.Button("Rotate")
-            self.container.add(self.button)
+            self.container_vbox.add(self.button)
             self.button.connect('clicked', self.hello, None)
             self.button.show()
 
     def hello(self, sender, data=None):
         # label with the text, make the string translatable
 
-        self.container.remove(self.label)
+        self.container_vbox.remove(self.label)
         self.angle = self.angle + 30
         self.label.set_text("Hello World!")
-        self.container.add(self.label)  
+        self.container_vbox.add(self.label)
         self.label.set_angle(self.angle)
         self.label.show()
 
-        self.container.remove(self.button) 
+        self.container_vbox.remove(self.button)
         self.button = Gtk.Button("Rotate")
-        self.container.add(self.button)
+        self.container_vbox.add(self.button)
         self.button.connect('clicked', self.hello, None)
         self.button.show()
 

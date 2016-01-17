@@ -61,7 +61,6 @@ class AbiWordActivity(activity.Activity):
 
     def __init__ (self, handle):
         if os.path.exists('/tmp/1'):
-            print("TEMP1")
             os.remove('/tmp/1')
             activity.Activity.__init__ (self, handle)
 
@@ -76,7 +75,6 @@ class AbiWordActivity(activity.Activity):
             self.abiword_canvas.show()
 
         if os.path.exists('/tmp/2'):
-            print("TEMP2")
             os.remove('/tmp/2')
             toolbar_box = ToolbarBox()
 
@@ -108,7 +106,6 @@ class AbiWordActivity(activity.Activity):
             self.set_toolbar_box(toolbar_box)
 
         if os.path.exists('/tmp/3'):
-            print("TEMP3")
             os.remove('/tmp/3')    
 
             text_toolbar = ToolbarButton()
@@ -240,6 +237,8 @@ class AbiWordActivity(activity.Activity):
 
         self.connect('shared', self._shared_cb)
 
+        self._shared_activity = self.get_shared_activity()
+
         if self._shared_activity:
             # we are joining the activity
             logger.debug("We are joining an activity")
@@ -267,7 +266,7 @@ class AbiWordActivity(activity.Activity):
         def save_func(buf, data):
             data.append(buf)
 
-        pixbuf.save_to_callback(save_func, 'png', user_data=preview_data)
+        ##pixbuf.save_to_callback(save_func, 'png', user_data=preview_data)
         preview_data = ''.join(preview_data)
 
         return preview_data

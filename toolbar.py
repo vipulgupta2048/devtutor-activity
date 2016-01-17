@@ -283,7 +283,7 @@ class ViewToolbar(Gtk.Toolbar):
 
         # TODO: fix the initial value
         self._zoom_spin_adj = Gtk.Adjustment(0, 25, 400, 25, 50, 0)
-        self._zoom_spin = Gtk.SpinButton(self._zoom_spin_adj, 0, 0)
+        self._zoom_spin = Gtk.SpinButton.new(self._zoom_spin_adj, 0, 0)
         self._zoom_spin_id = self._zoom_spin.connect('value-changed',
                                                      self._zoom_spin_cb)
         self._zoom_spin.set_numeric(True)
@@ -313,7 +313,7 @@ class ViewToolbar(Gtk.Toolbar):
         tool_item_page_label.show()
 
         self._page_spin_adj = Gtk.Adjustment(0, 1, 0, -1, -1, 0)
-        self._page_spin = Gtk.SpinButton(self._page_spin_adj, 0, 0)
+        self._page_spin = Gtk.SpinButton.new(self._page_spin_adj, 0, 0)
         self._page_spin_id = self._page_spin.connect('value-changed',
                                                      self._page_spin_cb)
         self._page_spin.set_numeric(True)
