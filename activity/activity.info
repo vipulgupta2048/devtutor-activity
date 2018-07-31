@@ -6,5 +6,5 @@ exec = activityname.sh
 icon = activity-helloworld
 license = GPLv2+;GPLv3+
 repository = https://github.com/sugarlabs/devtutor-activity
-summary = 
+summary = Activity which helps in understanding the API provided by Sugar.
 tags =
